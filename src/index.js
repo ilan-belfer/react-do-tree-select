@@ -30,6 +30,9 @@ const defaultProps = {
         halfChain: true,        // 即使子级节点被全部选中影响父级节点半选；
         initCheckedList: []     // 初始化多选数组
     },
+    searchbox: {
+        placeholder: 'Search'
+    },
     prefixClassName: 'do',
     paddingLeftLevel: 20
 }
@@ -45,7 +48,7 @@ class TreeSelect extends Component {
             checkedList: new Map(), // 勾选的Map列表
             searchVal: '',          // 搜索的值
             selectVal: '',          // 选中的条目
-            checkbox: {},           // 复选框的配置
+            searchbox: {},           // 复选框的配置
             showlevel: 0,           // 展开的层级
             updateListState: false, // 强制更新List组件
             loading: true           // 加载中。。。
@@ -71,7 +74,8 @@ class TreeSelect extends Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         const defaultConfig = {
             showlevel: nextProps.showlevel || defaultProps.showlevel,
-            checkbox: nextProps.checkbox || defaultProps.checkbox
+            checkbox: nextProps.checkbox || defaultProps.checkbox,
+            searchbox: nextProps.searchbox || defaultProps.searchbox
         }
         if (nextProps.treeData !== prevState.treeData) {
             const initCheckedListVal = defaultConfig.checkbox.enable ? defaultConfig.checkbox.initCheckedList.map((item)=>[item.toString(), item.toString()]) : []
@@ -79,7 +83,6 @@ class TreeSelect extends Component {
             const {map, idList, renderIdList, checkedList} = generateTreeDataMap({}, nextProps.treeData, defaultConfig, initCheckedList, new Map())
             
             defaultConfig.checkbox.enable && checkedCheckedList(map, checkedList, defaultConfig.checkbox)
-            
             return {
                 treeData: nextProps.treeData,
                 // value: nextProps.value,
@@ -88,6 +91,7 @@ class TreeSelect extends Component {
                 renderIdList: renderIdList,
                 selectVal: nextProps.selectVal || '',
                 checkbox: defaultConfig.checkbox,
+                searchbox: defaultConfig.searchbox,
                 showlevel: defaultConfig.showlevel,
                 checkedList: checkedList,
                 loading: false,
@@ -208,26 +212,42 @@ class TreeSelect extends Component {
         e && e.stopPropagation();
         const {onChecked} = this.props
         const {treeDataMap, checkedList, updateListState, checkbox} = this.state
-        const {checkStatus, value} = item
+        const {checkStatus, value, title} = item
         const {checked} = checkStatus
+        const {radio} = checkbox
         // 判断是否是禁用
         const disabled = item.disabled
         if (disabled) {
             return
         }
         // 影响性能，直接修改Map值 const _treeDataMap = Object.assign({}, treeDataMap)
-        const _treeDataMap = treeDataMap
-
+        let _treeDataMap = treeDataMap
+        
         const _checked = !checked;
         const _checkedList = new Map(checkedList);
-
+        
         // 处理勾选的value List
         if (_checked) {
+            if (radio) {
+                _checkedList.clear();
+                const keys = Object.keys(_treeDataMap);
+                keys.forEach(value => {
+                    _treeDataMap[value] = {
+                        ..._treeDataMap[value],
+                        checkStatus: {
+                            ..._treeDataMap[value].checkStatus,
+                            checked: false,
+                            halfChecked: false
+                        }
+                    }
+                })
+            }
             _checkedList.set(value, value)
+            // _checkedList.set(title, value)
         } else {
             delMapItem(_checkedList, value)
         }
-
+        
         // 处理treeDataMap的数据状态
         _treeDataMap[value] = {
             ..._treeDataMap[value],
@@ -289,6 +309,7 @@ class TreeSelect extends Component {
         const disabled = item.disabled && (!item.children || !isEmptyArray(item.children))
         const isSelectVal = selectVal === item.value
         const _checkbox = checkbox || defaultProps.checkbox
+        const { radio } = checkbox;
         return (
             <div
                 key={item.value}
@@ -304,7 +325,7 @@ class TreeSelect extends Component {
                     <div className={`${prefixClassName}-expandIcon`} onClick={(e) => this.onClickRowExpand(item, e)}>
                         {!isEmptyArray(item.children) && <i className={`${item.isExpand && prefixClassName + '-expand'}`}></i>}
                     </div>
-                    {_checkbox.enable && !disabled && <div
+                    {_checkbox.enable && !disabled && !radio &&<div
                         onClick={(e) => this.onChecked(item, e)}
                         className={`${prefixClassName}-checkbox ${checkedClassName} ${halfCheckedClassName}`}>
                         <span
@@ -312,8 +333,17 @@ class TreeSelect extends Component {
                             ? 'disabled'
                             : ''}`}></span>
                     </div>}
+                    {_checkbox.enable && !disabled && radio && <div
+                        onClick={(e) => this.onChecked(item, e)}
+                        className={`${prefixClassName}-radio ${checkedClassName}`}>
+                        <span
+                            className={`${prefixClassName}-radio-inner ${checkedClassName} ${disabled
+                            ? 'disabled'
+                            : ''}`}></span>
+                    </div>}
                     <div
-                        onClick={(e) => this.onClickRow(item, e)}
+                        onClick={(e) => this.onChecked(item, e)}
+                        // onClick={(e) => this.onClickRow(item, e)}
                         title={item.title}
                         className={`${prefixClassName}-title ${isSelectVal
                         ? 'active'
@@ -362,7 +392,7 @@ class TreeSelect extends Component {
     }
 
     render() {
-        const {style, wrapperClassName, checkbox} = this.props;
+        const {style, wrapperClassName, checkbox, searchbox} = this.props;
         const {
             treeDataMap,
             renderIdList,
@@ -414,6 +444,7 @@ class TreeSelect extends Component {
             }}>
                 <SearchBox
                     defaultProps={defaultProps}
+                    searchbox={searchbox}
                     searchVal={searchVal}
                     onSearch={this.onSearch}/>
                 <div
@@ -458,6 +489,7 @@ TreeSelect.propTypes = {
     treeData: PropTypes.array.isRequired,   // 元数据
     style: PropTypes.object,                // 样式
     checkbox: PropTypes.object,             // 复选框配置
+    searchbox: PropTypes.object,             // 复选框配置
     showlevel: PropTypes.number,            // 显示层级
     selectVal: PropTypes.string,            // 选中的值
     onSelect: PropTypes.func,               // 选择节点的回调函数

@@ -29,9 +29,9 @@ class SearchBox extends Component {
     }
 
     render() {
-        const { defaultProps } = this.props;
+        const { defaultProps, searchbox } = this.props;
         const prefixClassName = defaultProps.prefixClassName;
-        const placeholder = defaultProps.placeholder;
+        const placeholder = (searchbox && searchbox.placeholder) || 'Search';
         const _className = `${prefixClassName}-SearchBox`
         return (
             <div className={_className}>
