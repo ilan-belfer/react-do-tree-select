@@ -18,14 +18,17 @@ class SearchBox extends Component {
     }
 
     onKeyDown(evt) {
-        //回车事件
-        evt.keyCode === 13 && this.clickSearchIcon();
+        this.clickSearchIcon();
+        // evt.keyCode === 13 && this.clickSearchIcon();
     }
 
     onInput(e) {
         this.setState({
             searchVal: e.target.value
         })
+        if (e.target.value === '') {
+            this.props.onSearch('');
+        }
     }
 
     render() {
@@ -33,12 +36,15 @@ class SearchBox extends Component {
         const prefixClassName = defaultProps.prefixClassName;
         const placeholder = (searchbox && searchbox.placeholder) || 'Search';
         const _className = `${prefixClassName}-SearchBox`
+        const _wrapperClassName = `${prefixClassName}-SearchBox-Wrapper`
         return (
-            <div className={_className}>
-                <input className={`${prefixClassName}-SearchBox-input`} type="text" onInput={this.onInput} onKeyDown={this.onKeyDown} placeholder={placeholder} />
-                <span className={`${prefixClassName}-SearchBox-input-suffix`} onClick={this.clickSearchIcon}>
-                    <i className={`${prefixClassName}-icon-search`}></i>
-                </span>
+            <div className={_wrapperClassName}>
+                <div className={_className}>
+                    <input className={`${prefixClassName}-SearchBox-input`} type="text" onInput={this.onInput} onKeyDown={this.onKeyDown} placeholder={placeholder} />
+                    <span className={`${prefixClassName}-SearchBox-input-suffix`} onClick={this.clickSearchIcon}>
+                        <i className={`${prefixClassName}-icon-search`}></i>
+                    </span>
+                </div>
             </div>
         );
     }

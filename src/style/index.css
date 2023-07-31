@@ -32,10 +32,10 @@
 }
 
 .do-TreeSelectList .do-fadeIn {
-    -webkit-animation-name: fadeIn; /*动画名称*/
-    -webkit-animation-duration: .2s; /*动画持续时间*/
-    -webkit-animation-iteration-count: 1; /*动画次数*/
-    -webkit-animation-delay: 0s; /*延迟时间*/
+    /* -webkit-animation-name: fadeIn;
+    -webkit-animation-duration: .2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-delay: 0s; */
 }
 .do-TreeNode:hover {
     color: #4093fc;
@@ -44,9 +44,9 @@
     border-color: #4093fc;
 }
 .do-TreeNode > div {
-    -webkit-transition: all 0.2s ease-in;
+    /* -webkit-transition: all 0.2s ease-in;
     -moz-transition: all 0.2s ease-in;
-    transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in; */
 }
 .do-TreeNode > div > div {
     display: inline-block;
@@ -131,7 +131,7 @@
     position: relative;
     vertical-align: middle;
     top: -0.09em;
-    margin: 4px 8px 4px 4px;
+    margin: 4px 1px 4px 1px;
     width: 14px;
     height: 14px;
 }
@@ -258,8 +258,8 @@
     -ms-transform: scale(1);
     transform: scale(1);
     position: absolute;
-    left: 2px;
-    top: 4px;
+    left: 1px;
+    top: 3px;
     width: 6px;
     height: 0px;
     box-sizing: border-box;
