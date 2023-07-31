@@ -14,21 +14,21 @@ class SearchBox extends Component {
     }
 
     clickSearchIcon() {
-        this.props.onSearch(this.state.searchVal)
+        this.props.onSearch(this.state.searchVal);
     }
 
     onKeyDown(evt) {
-        this.clickSearchIcon();
+        // this.clickSearchIcon();
         // evt.keyCode === 13 && this.clickSearchIcon();
     }
 
     onInput(e) {
         this.setState({
             searchVal: e.target.value
-        })
-        if (e.target.value === '') {
-            this.props.onSearch('');
-        }
+        });
+        // if (e.target.value === '') {
+            // }
+        this.props.onSearch(e.target.value);
     }
 
     render() {

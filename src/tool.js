@@ -249,16 +249,18 @@ export const getFilterIdList = (idList, treeDataMap, val, filterIdList = [],) =>
     let _filterIdList = filterIdList;
     idList.forEach((item) => {
         let {title, value, children, parentVal} = treeDataMap[item];
+        let formetedValue = '';
 
-        if (title)
-            title = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        // if (title)
+        //     title = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         
+        if (value)
+            formetedValue = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
         if (val)
             val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-        if (title.indexOf(val) > -1 || (!isEmptyArray(children) && filterListCheckChildren(children, treeDataMap, val))) {
-            // console.log(value)
-
+        if (formetedValue.indexOf(val) > -1 || (!isEmptyArray(children) && filterListCheckChildren(children, treeDataMap, val))) {
             if (parentVal) {
                 // 父级展开isExpand
                 treeDataMap[parentVal] = {
@@ -270,6 +272,15 @@ export const getFilterIdList = (idList, treeDataMap, val, filterIdList = [],) =>
         }
     })
     return _filterIdList
+}
+
+export const unExpandList = (idList, treeDataMap) => {
+    let _filterIdList = [];
+    idList.forEach((item) => {
+        let {title, value, children, parentVal} = treeDataMap[item];
+        _filterIdList.push(value);
+    });
+    // return treeDataMap.map(a => ({...a, isExpand: false}));
 }
 
 /**

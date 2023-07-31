@@ -10,7 +10,8 @@ import {
     getFilterIdList,
     treeDataMapCheckRenderIdList,
     checkedCheckedList,
-    filterListCheckChildren
+    filterListCheckChildren,
+    unExpandList
 } from './tool';
 import './style/index.css';
 import SearchBox from './searchBox'
@@ -101,7 +102,7 @@ class TreeSelect extends Component {
     }
     
     componentDidCatch(err) {
-        console.log(err)
+        // console.log(err)
     }
 
     /**
@@ -377,12 +378,18 @@ class TreeSelect extends Component {
         if (val) {
             _filterIdList = getFilterIdList(idList, _treeDataMap, val)
         } else {
-            _filterIdList = this.cacheIdList
+            _filterIdList = this.cacheIdList;
+            Object.keys(_treeDataMap).forEach(key => {
+                treeDataMap[key] = {
+                    ...treeDataMap[key],
+                    isExpand: false
+                }
+            })
             this.cacheIdList = null
         }
-
+        
         _filterIdList = treeDataMapCheckRenderIdList(_treeDataMap, _filterIdList)
-
+        
         this.setState({
             searchVal: val,
             renderIdList: _filterIdList,
