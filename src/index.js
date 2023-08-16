@@ -323,7 +323,7 @@ class TreeSelect extends Component {
                     className={`${prefixClassName}-fadeIn ${item.disabled
                     ? 'disabled'
                     : ''}`}>
-                    <div className={`${prefixClassName}-expandIcon`} onClick={(e) => this.onClickRowExpand(item, e)}>
+                    <div className={`${prefixClassName}-expandIcon`} onClick={(e) => this.onClickRowExpand(item, e)} style={{width: !isEmptyArray(item.children) ? 30 : 16}}>
                         {!isEmptyArray(item.children) && <i className={`${item.isExpand && prefixClassName + '-expand'}`}></i>}
                     </div>
                     {_checkbox.enable && !disabled && !radio &&<div
@@ -334,7 +334,7 @@ class TreeSelect extends Component {
                             ? 'disabled'
                             : ''}`}></span>
                     </div>}
-                    {_checkbox.enable && !disabled && radio && <div
+                    {_checkbox.enable && radio && <div
                         onClick={(e) => this.onChecked(item, e)}
                         className={`${prefixClassName}-radio ${checkedClassName}`}>
                         <span
@@ -359,6 +359,7 @@ class TreeSelect extends Component {
                             : ''
 }
                     </div>
+                    <div style={{width: 16}}></div>
                 </div>
             </div>
         )
@@ -473,7 +474,7 @@ class TreeSelect extends Component {
                                         width={actualWidth}
                                         height={actualHeight}
                                         rowCount={renderIdList.length}
-                                        rowHeight={22}
+                                        rowHeight={30}
                                         rowRenderer={this.treeNodeRender}
                                         overscanRowCount={20}
                                         autoContainerWidth={true}

@@ -41,9 +41,9 @@ class SearchBox extends Component {
             <div className={_wrapperClassName}>
                 <div className={_className}>
                     <input className={`${prefixClassName}-SearchBox-input`} type="text" onInput={this.onInput} onKeyDown={this.onKeyDown} placeholder={placeholder} />
-                    <span className={`${prefixClassName}-SearchBox-input-suffix`} onClick={this.clickSearchIcon}>
+                    {/* <span className={`${prefixClassName}-SearchBox-input-suffix`} onClick={this.clickSearchIcon}>
                         <i className={`${prefixClassName}-icon-search`}></i>
-                    </span>
+                    </span> */}
                 </div>
             </div>
         );
