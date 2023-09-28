@@ -32,7 +32,8 @@ const defaultProps = {
         initCheckedList: []     // 初始化多选数组
     },
     searchbox: {
-        placeholder: 'Search'
+        placeholder: 'Search',
+        hide: false
     },
     prefixClassName: 'do',
     paddingLeftLevel: 20
@@ -320,10 +321,11 @@ class TreeSelect extends Component {
             }}
                 className={`${prefixClassName}-TreeNode`}>
                 <div
-                    className={`${prefixClassName}-fadeIn ${item.disabled
-                    ? 'disabled'
-                    : ''}`}>
-                    <div className={`${prefixClassName}-expandIcon`} onClick={(e) => this.onClickRowExpand(item, e)} style={{width: !isEmptyArray(item.children) ? 30 : 16}}>
+                    className={`${prefixClassName}-fadeIn 
+                    ${item.disabled && 'disabled'} 
+                    ${item.checkStatus.checked && 'checked'}
+                    `}>
+                    <div className={`${prefixClassName}-expandIcon`} onClick={(e) => this.onClickRowExpand(item, e)} style={{width: item.children ? 30 : 16}}>
                         {!isEmptyArray(item.children) && <i className={`${item.isExpand && prefixClassName + '-expand'}`}></i>}
                     </div>
                     {_checkbox.enable && !disabled && !radio &&<div
@@ -400,7 +402,7 @@ class TreeSelect extends Component {
     }
 
     render() {
-        const {style, wrapperClassName, checkbox, searchbox} = this.props;
+        const {style, wrapperClassName, checkbox, searchbox = {}} = this.props;
         const {
             treeDataMap,
             renderIdList,
@@ -413,6 +415,7 @@ class TreeSelect extends Component {
         const _style = style || defaultProps.style;
         const prefixClassName = defaultProps.prefixClassName;
         const _className = `${prefixClassName}-TreeSelect ${wrapperClassName || ''}`
+        const hideSearchBar = searchbox && searchbox.hide;
         if(loading) {
             return (
                 <div
@@ -450,11 +453,15 @@ class TreeSelect extends Component {
                 width: _style.width,
                 height: '100%',
             }}>
-                <SearchBox
-                    defaultProps={defaultProps}
-                    searchbox={searchbox}
-                    searchVal={searchVal}
-                    onSearch={this.onSearch}/>
+                {
+                    !hideSearchBar && (
+                        <SearchBox
+                            defaultProps={defaultProps}
+                            searchbox={searchbox}
+                            searchVal={searchVal}
+                            onSearch={this.onSearch} />
+                    )
+                }
                 <div
                     className={`${prefixClassName}-TreeSelectList`}
                     style={{

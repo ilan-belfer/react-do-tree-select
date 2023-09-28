@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir lib --copy-files",
+    "copy": "cp -R lib/. ../front-monorepo/analytics/src/components/select-tree/",
     "test": "jest"
   },
   "author": "hjyue1@163.com",

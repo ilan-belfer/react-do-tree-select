@@ -30,11 +30,15 @@
 .do-TreeNode .disabled{
     color: #b8b8b8 !important;
     border-color: #b8b8b8;
+  }
+.do-TreeNode .checked{
+  color: #343434 !important;
+  background: #E2EFE9 !important;
 }
-
 .do-TreeSelectList .do-fadeIn {
     display: flex;
     align-items: center;
+    height: 100%;
     /* -webkit-animation-name: fadeIn;
     -webkit-animation-duration: .2s;
     -webkit-animation-iteration-count: 1;
@@ -114,7 +118,7 @@
 }
 
 .ReactVirtualized__List {
-    padding-top: 5px;
+    /* padding-top: 5px; */
 }
 
 .do-TreeSelect .ReactVirtualized__Grid__innerScrollContainer {
